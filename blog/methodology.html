@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Do Agent Skills Actually Help? | skill-eval</title>
+<meta name="description" content="We blind-tested 123 agent skills from ClawHub. 76%% are genuinely useful. Here is the methodology and findings.">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, Georgia, serif;
+        background: #0d1117;
+        color: #c9d1d9;
+        line-height: 1.7;
+    }
+    a { color: #58a6ff; }
+    nav {
+        background: #161b22;
+        border-bottom: 1px solid #30363d;
+        padding: 0.75rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+    nav .logo { font-size: 1.2rem; font-weight: 700; color: #f0f6fc; font-family: -apple-system, sans-serif; }
+    nav .nav-links { display: flex; gap: 1.5rem; }
+    nav .nav-links a { color: #8b949e; font-size: 0.9rem; text-decoration: none; font-family: -apple-system, sans-serif; }
+    nav .nav-links a:hover { color: #f0f6fc; }
+    nav .nav-links a.active { color: #f0f6fc; }
+    .article {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 3rem 2rem 4rem;
+    }
+    .article h1 {
+        font-size: 2.2rem;
+        color: #f0f6fc;
+        margin-bottom: 0.5rem;
+        line-height: 1.3;
+        font-family: -apple-system, sans-serif;
+    }
+    .article h2 {
+        font-size: 1.4rem;
+        color: #f0f6fc;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        font-family: -apple-system, sans-serif;
+    }
+    .article p { margin-bottom: 1.2rem; }
+    .article strong { color: #f0f6fc; }
+    .article em { color: #8b949e; }
+    .article hr { border: none; border-top: 1px solid #30363d; margin: 2rem 0; }
+    .article ul, .article ol { margin-bottom: 1.2rem; padding-left: 1.5rem; }
+    .article li { margin-bottom: 0.4rem; }
+    .article code {
+        background: #161b22;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+        color: #e6edf3;
+    }
+    .article table {
+        width: 100%%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+        background: #161b22;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #30363d;
+    }
+    .article th {
+        background: #21262d;
+        color: #f0f6fc;
+        padding: 10px 14px;
+        text-align: left;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    .article td {
+        padding: 10px 14px;
+        border-bottom: 1px solid #21262d;
+        font-size: 0.9rem;
+    }
+    .article blockquote {
+        border-left: 3px solid #30363d;
+        padding-left: 1rem;
+        color: #8b949e;
+        margin-bottom: 1.2rem;
+    }
+</style>
+</head>
+<body>
+<nav>
+    <div class="logo">skill-eval</div>
+    <div class="nav-links">
+        <a href="../index.html">Leaderboard</a>
+        <a href="methodology.html" class="active">Methodology</a>
+        <a href="https://github.com/jensen-srp/skill-eval" target="_blank">GitHub</a>
+    </div>
+</nav>
+<div class="article">
+<h1>Do Agent Skills Actually Help? We Tested 123 to Find Out.</h1>
+<p><em>Published 2026-03-10 | skill-eval v0.4.0</em></p>
+<hr />
+<p>Everyone's building agent skills. Prompt templates, workflow scaffolds, CLI wrappers -- the ClawHub marketplace has hundreds. But here's the question nobody's answering: <strong>do they actually make the agent better?</strong></p>
+<p>We built a system to find out. Not with vibes. Not with self-reported metrics. With blind A/B testing at scale.</p>
+<h2>The Setup</h2>
+<p><strong>skill-eval</strong> is a self-evolving evaluation engine. For each skill, it runs the same task twice: once with the skill loaded, once without (bare model). Same prompts, same assertions, same grading. The only variable is whether the skill is present.</p>
+<p>We tested <strong>123 skills</strong> from ClawHub using Claude Opus 4 as the execution model. Every skill got:
+- 2-3 realistic test prompts
+- Deterministic assertions (file checks, keyword presence, format compliance)
+- Rubric-based quality grading
+- Timing and token usage measurement</p>
+<p>The result: a score from 0-10 combining quality (0-5), value-add delta (0-3), and efficiency (0-2).</p>
+<h2>The Results</h2>
+<p><strong>76% of skills are genuinely useful.</strong> That's 94 out of 123 scoring 7+ ("Recommended").</p>
+<p>The full breakdown:</p>
+<ul>
+<li><strong>Recommended (7-10):</strong> 94 skills (76.4%)</li>
+<li><strong>Conditional (5-6.9):</strong> 25 skills (20.3%)</li>
+<li><strong>Marginal (3-4.9):</strong> 3 skills (2.4%)</li>
+<li><strong>Not Recommended (0-2.9):</strong> 5 skills (4.1%)</li>
+</ul>
+<p>92% of skills showed a positive quality delta over baseline. The model is measurably better with most skills loaded.</p>
+<p>But not all skills are created equal.</p>
+<h2>What Makes a Great Skill</h2>
+<p>The top scorer -- <strong>Explain Code</strong> at 10.0/10 -- teaches the model to use analogies, ASCII diagrams, and structured walkthroughs when explaining code. The model CAN do these things without the skill, but it doesn't by default. The skill makes it consistent.</p>
+<p>This is the pattern: the best skills don't teach the model new facts. They encode <strong>preferences and processes</strong> the model wouldn't follow on its own.</p>
+<p><strong>Article Writer</strong> (9.5/10) defines a banned-word list, numbered module structure, and "golden sentence" convention. The baseline model uses filler words freely; the skill eliminates them. 100% delta -- our first perfect discriminator.</p>
+<p><strong>BookNotes</strong> (9.6/10) produces structured reading notes with a specific template. Baseline pass rate: 12%. With skill: 100%. The model needs to be told what format to use.</p>
+<p>The common thread: <strong>opinionated skills that define specific, testable conventions score highest.</strong> Vague "be better at X" instructions produce minimal delta.</p>
+<h2>What Makes a Terrible Skill</h2>
+<p>The bottom of the leaderboard tells an equally clear story.</p>
+<p><strong>bio-generator-pay</strong> and <strong>hashtag-generator-pay</strong> both scored 2.0/10 with 0% pass rate. Why? They require paid API credentials that weren't configured. The baseline model completed the same tasks perfectly. These aren't bad skills -- they're broken deployment stories.</p>
+<p><strong>finance-lite</strong> (2.8/10) failed because its error handling bypasses its own output formatting. When the market data API is down, it drops the source citations and freshness timestamps that its template requires. The template is good; the fallback path is not.</p>
+<h2>The 8 Failure Modes</h2>
+<p>We cataloged every way skills fail:</p>
+<ol>
+<li><strong>Dependency gate hard-fail</strong> -- Paid skills crash without API keys while baseline works fine</li>
+<li><strong>Phantom tooling</strong> -- SKILL.md references scripts that don't exist in the package</li>
+<li><strong>Reference manual anti-pattern</strong> -- 200+ lines of tutorial content the model already knows</li>
+<li><strong>Library-as-skill</strong> -- Contains Python class definitions instead of instructions</li>
+<li><strong>Baseline already strong</strong> -- Technical domains where the base model already excels</li>
+<li><strong>Template compliance drift</strong> -- Error paths bypass required formatting</li>
+<li><strong>Marketing claims without evidence</strong> -- "7.8x faster" with no data</li>
+<li><strong>Assertion-skill mismatch</strong> -- Output improves but score doesn't because assertions test the wrong thing</li>
+</ol>
+<p>The most common? <strong>Reference manual anti-pattern.</strong> Skill authors paste SQL templates, framework guides, and code patterns into SKILL.md thinking more context helps. It doesn't. The model already knows this stuff. You're just burning tokens.</p>
+<h2>The Surprising Finding: Less Is More</h2>
+<p>We built an automated skill improvement pipeline. For skills scoring below 7, we rewrite the SKILL.md and re-evaluate.</p>
+<p>The results:</p>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>Before</th>
+<th>After</th>
+<th>What Changed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data Analyst</td>
+<td>5.0</td>
+<td>7.0</td>
+<td>Removed 80% of content</td>
+</tr>
+<tr>
+<td>Data Model Designer</td>
+<td>5.5</td>
+<td>7.0</td>
+<td>Replaced Python classes with instructions</td>
+</tr>
+<tr>
+<td>Test Runner</td>
+<td>5.5</td>
+<td>7.0</td>
+<td>Removed framework tables, added mandates</td>
+</tr>
+</tbody>
+</table>
+<p>The primary improvement lever in all three cases: <strong>deleting content</strong>. Not adding instructions. Not making the skill smarter. Just making it smaller.</p>
+<p>Data Analyst's original SKILL.md was full of SQL templates, pandas patterns, and statistics references. The model already knows all of this. After removing 80% of the content and adding 10 lines of behavioral mandates (MUST include methodology section, NEVER use SELECT *, ALWAYS start with executive summary), the overhead dropped from +155% to +45% and the score jumped 2 points.</p>
+<p><strong>Skills should be behavioral contracts, not textbooks.</strong></p>
+<h2>The Self-Evolving Engine</h2>
+<p>The evaluation system itself improves over time. It's not a static benchmark.</p>
+<p>After each batch of evaluations, the engine:
+1. Updates its lessons learned (what assertion patterns work for which skill categories)
+2. Catalogs new failure modes
+3. Absorbs proven patterns back into its own methodology document
+4. Bumps its version when the methodology meaningfully changes</p>
+<p>We went from v0.1.0 (basic blind A/B, 7 phases) to v0.4.0 (12 phases, multi-model support, self-evolving improvement engine) in 4 days. Each batch produced sharper assertions that caught problems the previous batch missed.</p>
+<p>The improvement engine has its own knowledge base too -- learned patterns like "for reference-manual skills, delete 70% and add MUST/ALWAYS/NEVER mandates, expected gain: +1.5 to +2.0 points." It tracks which strategies work, which fail, and gets better at fixing skills over time.</p>
+<h2>What This Means for Skill Authors</h2>
+<p>If you're writing agent skills:</p>
+<ol>
+<li><strong>Be opinionated.</strong> Vague skills score low. Define specific output formats, banned words, required sections.</li>
+<li><strong>Don't teach -- instruct.</strong> The model already knows SQL, Python, and design patterns. Tell it WHAT TO DO, not HOW THINGS WORK.</li>
+<li><strong>Keep it under 100 lines.</strong> Every line of SKILL.md costs tokens. If your skill is over 100 lines, question every paragraph.</li>
+<li><strong>Use MUST/ALWAYS/NEVER.</strong> Behavioral mandates change model behavior. Descriptions don't.</li>
+<li><strong>Handle errors gracefully.</strong> If your skill depends on external data, the error path still needs to follow your output format.</li>
+<li><strong>Don't reference tools that don't exist.</strong> If your SKILL.md mentions scripts that aren't in the package, that's phantom tooling.</li>
+</ol>
+<h2>What's Next</h2>
+<ul>
+<li><strong>Multi-model evaluation</strong>: Testing skills across Claude, GPT-4.1, and Gemini to see which skills are model-agnostic vs model-specific</li>
+<li><strong>Skill author feedback pipeline</strong>: Auto-filing PRs with improved SKILL.md files for low-scoring skills</li>
+<li><strong>Regression tracking</strong>: Re-evaluating skills when they update to catch quality regressions</li>
+<li><strong>Skill composition testing</strong>: What happens when you stack multiple skills?</li>
+</ul>
+<p>The leaderboard is live. The methodology is open. The engine keeps getting better.</p>
+<p>Check the <a href="./index.html">full leaderboard</a> to see how your favorite skills rank.</p>
+<hr />
+<p><em>Built with skill-eval v0.4.0. Methodology: <a href="https://github.com/jensen-srp/skill-eval">SKILL-EVAL.md</a>. Questions? Open an issue.</em></p>
+</div>
+</body>
+</html>
